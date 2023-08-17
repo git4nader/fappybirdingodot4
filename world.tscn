@@ -1,0 +1,43 @@
+[gd_scene load_steps=10 format=3 uid="uid://b2su60bdronnv"]
+
+[ext_resource type="Script" path="res://world.gd" id="1_8nwhm"]
+[ext_resource type="Texture2D" uid="uid://bpgf2xf0waaxb" path="res://assets/textures/background.png" id="1_e4maj"]
+[ext_resource type="PackedScene" uid="uid://dlabs42txr6u5" path="res://UI/hud.tscn" id="2_bqbb2"]
+[ext_resource type="PackedScene" uid="uid://bqocxppmk1d1d" path="res://Characters/Player/player.tscn" id="2_er4jd"]
+[ext_resource type="Script" path="res://Characters/Player/player.gd" id="3_66qwt"]
+[ext_resource type="PackedScene" uid="uid://b6ddox6ijpejd" path="res://UI/start_menu_layer.tscn" id="3_vxtwm"]
+[ext_resource type="PackedScene" uid="uid://w8ru0ndne6sj" path="res://environment/ground.tscn" id="4_03c4c"]
+[ext_resource type="PackedScene" uid="uid://de7em1abtfn2t" path="res://UI/game_over_layer.tscn" id="4_iq4lk"]
+[ext_resource type="PackedScene" uid="uid://bcsmygfa73hpb" path="res://environment/obstacle_spawner.tscn" id="5_l0ur7"]
+
+[node name="World" type="Node2D"]
+position = Vector2(-2, 0)
+script = ExtResource("1_8nwhm")
+
+[node name="HUD" parent="." instance=ExtResource("2_bqbb2")]
+
+[node name="StartMenuLayer" parent="." instance=ExtResource("3_vxtwm")]
+
+[node name="GameOverLayer" parent="." instance=ExtResource("4_iq4lk")]
+visible = false
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("1_e4maj")
+centered = false
+
+[node name="ObstacleSpawner" parent="." instance=ExtResource("5_l0ur7")]
+position = Vector2(800, 0)
+
+[node name="Ground" parent="." instance=ExtResource("4_03c4c")]
+position = Vector2(-1, 684)
+
+[node name="Player" parent="." instance=ExtResource("2_er4jd")]
+position = Vector2(115, 427)
+gravity_scale = 0.0
+script = ExtResource("3_66qwt")
+
+[connection signal="start_game" from="StartMenuLayer" to="." method="_on_menu_layer_start_game"]
+[connection signal="body_entered" from="Ground/Deathzone" to="." method="_on_deathzone_body_entered"]
+[connection signal="died" from="Player" to="." method="_on_player_died"]
+
+[editable path="Ground"]

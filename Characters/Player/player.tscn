@@ -1,0 +1,110 @@
+[gd_scene load_steps=9 format=3 uid="uid://bqocxppmk1d1d"]
+
+[ext_resource type="Texture2D" uid="uid://bfvdylbd84cln" path="res://assets/textures/bird.png" id="1_c8oxh"]
+[ext_resource type="AudioStream" uid="uid://bj7p2qic2cfrl" path="res://assets/audio/hit.wav" id="2_8r2xp"]
+[ext_resource type="AudioStream" uid="uid://b55yeeor1ra8x" path="res://assets/audio/wing.wav" id="3_b1trd"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nico0"]
+radius = 20.0
+
+[sub_resource type="Animation" id="Animation_xnf3a"]
+resource_name = "Idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, -5), Vector2(0, 5)]
+}
+
+[sub_resource type="Animation" id="Animation_l5j1w"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_nx5ak"]
+resource_name = "flap"
+length = 0.3
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_v0cyk"]
+_data = {
+"Idle": SubResource("Animation_xnf3a"),
+"RESET": SubResource("Animation_l5j1w"),
+"flap": SubResource("Animation_nx5ak")
+}
+
+[node name="Player" type="RigidBody2D"]
+
+[node name="Sprite" type="Sprite2D" parent="."]
+position = Vector2(0, -5)
+texture = ExtResource("1_c8oxh")
+hframes = 3
+frame = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_nico0")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "Idle"
+libraries = {
+"": SubResource("AnimationLibrary_v0cyk")
+}
+
+[node name="Hit" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_8r2xp")
+
+[node name="Wing" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_b1trd")
